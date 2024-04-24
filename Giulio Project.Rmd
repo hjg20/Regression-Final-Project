@@ -1,0 +1,170 @@
+---
+title: "Final Project"
+author: "Hunter Garrison, Kevin Smith, Reese Madsen, Giulio Martini"
+date: "2024-04-26"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Section 1: Introduction
+
+In this project, we are working with a dataset observing the prices of houses and corresponding attributes of each house in India. Below are the attributes of each house recorded in the dataset:
+
+| Attribute               | Description                                     | Data Type |
+|--------|--------------------------------------------------------|--------|
+| [**price**]{.underline} | Price of the houses in rupees.                  | Integer   |
+| area                    | Area of a house in square feet                  | Integer   |
+| bedrooms                | Number of bedrooms in house                     | Integer   |
+| bathrooms               | Number of bathrooms in house                    | Integer   |
+| stories                 | Number of stories in house                      | Integer   |
+| mainroad                | Whether or not house is connected to main road  | Boolean   |
+| guestroom               | Whether or not house has a guest room           | Boolean   |
+| basement                | Whether or not house has a basement             | Boolean   |
+| hotwaterheating         | Whether or not house has a hot-water heater     | Boolean   |
+| airconditioning         | Whether or not house has air conditioning       | Boolean   |
+| parking                 | Number of parking spots at house                | Integer   |
+| prefarea                | Whether or not the house is in a preferred area | Boolean   |
+| furnishingstatus        | Furnishing status of the house                  | String    |
+
+Below is the first 5 lines of our dataset:
+
+```{r, echo=FALSE}
+data <- read.csv('Housing.csv')
+head(data, 5)
+#colSums(is.na(data))
+#hist(data$price, xlab="Price of House", ylab="Frequency", col="purple")
+```
+
+We are attempting to create a linear regression model that best explains the variance in the price of the houses using the predictors in our dataset. In this report, we will explore our data by finding collinearity, outliers, influential points, and by checking error assumption violations. We will also discover which variables are the most important by using model selection, and test OLS as well as GLS and WLS regressions.
+
+Model diagnostics (error assumptions/outliers/influential points): Kevin
+
+Variable Selection (forward/backward/step/AIC/BIC/RMSE_LOOCV): Hunter
+
+Collinearity/GLS/WLS: Reese
+
+Categorical Predictors (Interacitve/additive models): Guilio
+
+
+### Collinearity
+
+In our study of the dataset we must ask ourselves whether or not the data is plagued by the issue of collinearity: do the predictors present a linear relationship, not just with the response, but within each other as well? Collinearity can be deleterious when inspecting a model and deciphering its interpretation; inflated R^2 scores and diminished p-values are but a few of the problems that arise alongside predictor collinearity, as such, the dataset must be tested for it. 
+
+Let us begin by obtaining once more an overview of the dataset: what each predictor is composed of, and the data type it is made up of. 
+
+```{r}
+str(data)
+```
+
+The next part concerns the creation of a _correlation matrix_ and _correlation heatmap_ between each numerical predictor. This measures the correlation between predictors, and provides us with a visual method of estimating it. Each categorical column is _label encoded_ - their class value is turned to a constant integer - and is added to the correlation matrix. 
+```{r}
+library(dplyr)
+library(corrplot)
+library(forcats)
+
+data <- data %>%
+  mutate(across(where(is.character), as.factor))
+
+data_encoded <- data %>%
+  mutate(across(where(~is.factor(.) && nlevels(.) <= 3), as.integer))
+
+data_numeric_only <- data_encoded %>%
+  select(where(is.numeric))
+
+housing_preds <- select(data_numeric_only, -price)
+
+cor_matrix <- cor(housing_preds, use = "complete.obs")
+rounded_cor_matrix <- round(cor_matrix, 3)
+
+print(rounded_cor_matrix)
+
+```
+
+
+
+```{r}
+cor_matrix <- cor(housing_preds, use = "complete.obs")
+
+corrplot(cor_matrix, method = 'color', order = 'hclust',  diag = FALSE,
+         number.cex = 0.7, addCoef.col = 'black', tl.pos = 'd', cl.pos = 'r')
+```
+
+As we can see by the correlation heatmap, intra predictor correlation is quite minimum. The strongest correlation is between _stories_ and _bedrooms_, with a value of 0.41, swiftly followed by _bedrooms_ and _bathrooms_ with a coefficient of 0.37, and by _parking_ and _area_, with a value of 0.29. These coefficients are very small, however we will proceed with a more thorough investigation to make sure collinearity is not one of this dataset's problems.
+
+```{r}
+pairs(housing_preds, col = 'dodgerblue', pch=1)
+```
+
+```{r}
+library(olsrr)
+
+model = lm(price ~ ., data = data_encoded)
+
+round(ols_eigen_cindex(model)[, 1:2], 4)
+```
+
+The next step is viewing the dataset's condition numbers, based on a linear model's (that is using the dataset) values. The condition number appears to be a small 14.1939. Usually, a value above 30 marks the dataset for collinearity. The correlation with such a low condition number suggests that this is not an issue. To further confirm this hypothesis, we shall check each predictor's VIF value. 
+
+```{r}
+library(faraway)
+
+vif(model)
+```
+Only predictors with VIFs above 5 are considered problematic, however we can see that, in this dataset, the highest VIF value is 1.478029. We could stop, however we wish to make the investigation very thorough. 
+
+
+We can then check if the variables are orthogonal. An orthogonal variable is not plagued by multicollinearity, and has a R^2_k of less than 0.3, their formula is presented above, along with the results.
+```{r}
+1 - 1/vif(model)
+```
+We can see that most predictors are orthogonal, with the exception of _stories_.
+
+
+If, perchance, there was an issue of collinearity, we could check the individual condition numbers. They would have to be above 30. Each value above 30 would signify a singular instance of a problematic linear dependence between predictors. Luckily, there is none here, as you can see from the values below.
+```{r}
+library(olsrr)
+
+round(ols_eigen_cindex(model), 3)
+```
+
+To further capture how little multicollinearity there is in this dataset, I shall fit a new model with the most 'multicollineared' variable removed. It is _stories_, since it had the largest VIF (larger than 1.4), and the highest condition number (0.32342322, the only one that was not orthogonal).
+```{r}
+model_fix = lm(price ~ . - stories, data = data)
+
+vif(model_fix)
+
+```
+
+
+We shall see their R^2 values and their RMSE values; if multicollinearity is not a problem, they should not alter much. 
+```{r}
+summary(model_fix)
+summary(model)$adj.r.squared
+```
+
+```{r}
+summary(model_fix)$adj.r.squared
+```
+
+```{r}
+calc_loocv_rmse = function(model) {
+  sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
+}
+
+calc_loocv_rmse(model)
+```
+
+```{r}
+calc_loocv_rmse(model_fix)
+```
+
+The R^2 changes from 0.6728527 to 0.6443761, not a significant change.
+The RMSE changes from 1087994 to 1134033; more significant of a change, with respect to the adjusted R^2, but still not a crucial or decising change.
+
+With all the information provided, we then conclude, with confidence, that multicollinearity is not a problem of this dataset.
