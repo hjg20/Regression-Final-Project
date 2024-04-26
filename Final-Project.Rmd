@@ -32,7 +32,7 @@ In this project, we are working with a dataset comprising of the observed prices
 | prefarea                | Whether or not the house is in a preferred area                         | Boolean   |
 | furnishingstatus        | Furnishing status of the house (furnished, semi-furnished, unfurnished) | String    |
 
-The majority of our predictors in this dataset are of type boolean, with the remainders being integers and one categorical predictor comprising of strings. Below is the first 5 lines of our dataset:
+The majority of our predictors in this dataset are of type boolean, with the remainders being integers and one categorical predictor comprising of strings. Below is the first 5 lines of our dataset (code 1):
 
 ```{r, include=FALSE}
 data <- read.csv('Housing.csv')
@@ -59,7 +59,7 @@ $\bigskip$
 
 We are attempting to create a linear regression model that best explains the variance in the price of the houses using the predictors in our dataset. In this report, we will explore our data by finding collinearity, outliers, influential points, and by checking error assumption violations. We will also discover which variables are the most important by using variable selection, and test OLS as well as GLS and WLS regressions. After doing this, we will combine all the knowledge we have gained about our data set in order to find the model in which we believe best explains the variance in the price of the houses.
 
-We will now perform some exploratory data analysis to show the distribution of our response variable as well as some key relationships in this dataset. Below is a histogram of our response variable, price, as well as a table showing some key statistical information about the response:
+We will now perform some exploratory data analysis to show the distribution of our response variable as well as some key relationships in this dataset. Below is a histogram of our response variable, price, as well as a table showing some key statistical information about the response (code 2):
 
 ```{r, include=FALSE}
 library(dplyr)
@@ -82,13 +82,13 @@ price_summary <- data %>%
 print(price_summary)
 ```
 
-From our histogram and table, we see that our data is right skewed with a small amount of houses showing prices much farther than the mean. These houses may get removed as outliers later on in our report. Below, we also show a scatter plot of price vs. area:
+From our histogram and table, we see that our data is right skewed with a small amount of houses showing prices much farther than the mean. Below, we also show a scatter plot of price vs. area (code 3):
 
 ```{r, echo=FALSE}
 plot(data$area, data$price, xlab='Area', ylab='Price', main='Price vs. Area', col='blue')
 ```
 
-We can see a visible linear correlation between the two variables, suggesting that price will be a large factor in the models we will test.
+We can see a visible linear correlation between the two variables, suggesting that area will be a large factor in the models we will test.
 
 All in all, this dataset is very interesting to us because of how it can teach us the relationships between a house's price and attributes about the house and can help us better understand the housing market when we need to go out and purchase a house for ourselves.
 
@@ -98,15 +98,13 @@ All in all, this dataset is very interesting to us because of how it can teach u
 
 In our study of the dataset we must ask ourselves whether or not the data is plagued by the issue of collinearity. Do the predictors present a linear relationship, not just with the response, but within each other as well? Collinearity can hurt a model's performance; inflated R\^2 scores and diminished p-values are but a few of the problems that arise alongside predictor collinearity... and so, the dataset must be tested for it.
 
-Let us begin by creating a ***correlation heat-map*** for each predictor. This measures the correlation between predictors, and provides us with a visual method of estimating it. Each categorical column is *label encoded* - their class value is turned to a constant integer - and is added to the correlation matrix.
+Let us begin by creating a ***correlation heat-map*** for each predictor. This measures the correlation between predictors, and provides us with a visual method of estimating it. Each categorical column is *label encoded* - their class value is turned to a constant integer - and is added to the correlation matrix (code 4).
 
 ```{r, include=FALSE}
 library(dplyr)
 library(corrplot)
 library(forcats)
-```
 
-```{r, include=FALSE}
 data <- data %>%
   mutate(across(where(is.character), as.factor))
 
@@ -119,104 +117,91 @@ data_numeric_only <- data_encoded %>%
 housing_preds <- select(data_numeric_only, -price)
 
 cor_matrix <- cor(housing_preds, use = "complete.obs")
-rounded_cor_matrix <- round(cor_matrix, 3)
 
-print(rounded_cor_matrix)
-```
-
-```{r, echo=FALSE}
-cor_matrix <- cor(housing_preds, use = "complete.obs")
-
-# Create the correlation plot
 corrplot(cor_matrix, method = 'color', order = 'hclust', diag = FALSE,
          number.cex = 0.7, addCoef.col = 'black', tl.pos = 'd', tl.cex = 0.6, cl.cex = 0.7, cl.pos = 'r')
 ```
 
-As we can see by the correlation heat-map, correlations between each predictor are realtively small. The strongest correlation is between *stories* and *bedrooms*, with a value of 0.41, swiftly followed by *bedrooms* and *bathrooms* with a coefficient of 0.37, and by *parking* and *area*, with a value of 0.29. These coefficients are decently small, however we will proceed with a more thorough investigation to make sure collinearity is not one of this dataset's problems.
-
-```{r, include=FALSE}
-pairs(housing_preds, col = 'dodgerblue', pch=1)
-```
+As we can see by the correlation heat-map, correlations between each predictor are realtively small. The strongest correlation is between *stories* and *bedrooms*, with a value of 0.41, swiftly followed by *bedrooms* and *bathrooms* with a coefficient of 0.37, and by *parking* and *area*, with a value of 0.35. These coefficients are decently small, however we will proceed with a more thorough investigation to make sure collinearity is not one of this dataset's problems.
 
 ```{r, include=FALSE}
 library(olsrr)
-```
-
-```{r, include=FALSE}
+pairs(housing_preds, col = 'dodgerblue', pch=1)
 model = lm(price ~ ., data = data_numeric_only)
 
 round(ols_eigen_cindex(model)[, 1:2], 4)
 ```
 
-The next step is viewing the dataset's condition numbers, based on a linear model's (that is using the dataset) values.
+Our next step is viewing the dataset's condition numbers, which are listed below (code 5):
 
 | Eigenvalue | Condition Index |
 |:-----------|:----------------|
 | 11.4591    | 1.0000          |
-| 0.5846     | 4.4275          |
-| 0.2140     | 7.3182          |
-| 0.1537     | 8.6333          |
-| 0.1229     | 9.6550          |
-| 0.1016     | 10.6223         |
-| 0.0886     | 11.3721         |
-| 0.0778     | 12.1358         |
-| 0.0622     | 13.5738         |
-| 0.0569     | 14.1939         |
-| 0.0403     | 16.8673         |
-| 0.0309     | 19.2715         |
-| 0.0075     | 38.9969         |
+| 0.5846     | 4.428           |
+| 0.2140     | 7.318           |
+| 0.1537     | 8.633           |
+| 0.1229     | 9.655           |
+| 0.1016     | 10.622          |
+| 0.0886     | 11.372          |
+| 0.0778     | 12.136          |
+| 0.0622     | 13.574          |
+| 0.0569     | 14.194          |
+| 0.0403     | 16.867          |
+| 0.0309     | 19.272          |
+| 0.0075     | 38.997          |
 
-The condition number is 38.9969, and usually a value above 30 marks the dataset for collinearity. This value of condition number suggests that collinearity should be a problem in this dataset. To further confirm this hypothesis, we shall check each predictor's VIF value.
+The condition number is 38.997, and usually a value above 30 marks the dataset for collinearity. This value suggests that collinearity should be a problem in this dataset. To further confirm this hypothesis, we shall check each predictor's VIF value (code 6).
 
 ```{r, include=FALSE}
 library(faraway)
-```
-
-```{r, include=FALSE}
 vif(model)
 ```
 
-| Variable         | VIF      |
-|:-----------------|:---------|
-| area             | 1.325208 |
-| bedrooms         | 1.367503 |
-| bathrooms        | 1.286559 |
-| stories          | 1.478029 |
-| mainroad         | 1.172661 |
-| guestroom        | 1.212687 |
-| basement         | 1.320749 |
-| hotwaterheating  | 1.039293 |
-| airconditioning  | 1.207262 |
-| parking          | 1.211959 |
-| prefarea         | 1.148598 |
-| furnishingstatus | 1.095641 |
+| Variable         | VIF   |
+|:-----------------|:------|
+| area             | 1.325 |
+| bedrooms         | 1.368 |
+| bathrooms        | 1.287 |
+| stories          | 1.478 |
+| mainroad         | 1.173 |
+| guestroom        | 1.213 |
+| basement         | 1.321 |
+| hotwaterheating  | 1.039 |
+| airconditioning  | 1.207 |
+| parking          | 1.212 |
+| prefarea         | 1.149 |
+| furnishingstatus | 1.096 |
 
-Only predictors with VIFs above 5 are considered problematic, however we can see that, in this dataset, the highest VIF value is 1.478029. We could stop, however we wish to make the investigation very thorough.
+Only predictors with VIFs above 5 are considered problematic, however we can see that, in this dataset, the highest VIF value is 1.478. We could stop, however we wish to make the investigation very thorough.
 
-We can then check if the variables are orthogonal. An orthogonal variable is not plagued by multicollinearity, and has a R\^2_k of less than 0.3. Below is a table of these values for each predictor:
+We can then check if the variables are orthogonal. An orthogonal variable is not plagued by multicollinearity, and has a $R^2_k$ of less than 0.3. Below is a table of these values for each predictor (code 7):
 
 ```{r, include=FALSE}
 1 - 1/vif(model)
 ```
 
-| Variable         | $R^2_k$    |
-|:-----------------|:-----------|
-| area             | 0.24540168 |
-| bedrooms         | 0.26874003 |
-| bathrooms        | 0.2273304  |
-| stories          | 0.32342322 |
-| mainroad         | 0.14723849 |
-| guestroom        | 0.17538517 |
-| basement         | 0.24285414 |
-| hotwaterheating  | 0.03780781 |
-| airconditioning  | 0.17167947 |
-| parking          | 0.17488936 |
-| prefarea         | 0.12937340 |
-| furnishingstatus | 0.08729247 |
+| Variable         | $R^2_k$ |
+|:-----------------|:--------|
+| area             | 0.245   |
+| bedrooms         | 0.269   |
+| bathrooms        | 0.227   |
+| stories          | 0.323   |
+| mainroad         | 0.147   |
+| guestroom        | 0.175   |
+| basement         | 0.243   |
+| hotwaterheating  | 0.038   |
+| airconditioning  | 0.172   |
+| parking          | 0.175   |
+| prefarea         | 0.129   |
+| furnishingstatus | 0.087   |
 
-We can see that most predictors are orthogonal, with the exception of *stories* which has a value of 0.3234.
+We can see that most predictors are orthogonal, with the exception of *stories* which has a value of 0.323.
 
-If, perchance, there was an issue of collinearity, we could check the individual condition numbers. They would have to be above 30. Each value above 30 would signify a singular instance of a problematic linear dependence between predictors. Luckily, there is none here, as you can see from the values below:
+If, perchance, there was an issue of collinearity, we could check the individual condition numbers. They would have to be above 30. Each value above 30 would signify a singular instance of a problematic linear dependence between predictors. Luckily, there is none here, as you can see from the values below (code 8):
+
+```{r, include=FALSE}
+round(ols_eigen_cindex(model), 3)
+```
 
 | Eigenvalue | Condition Index | intercept | area  | bedrooms | bathrooms | stories |
 |------------|-----------------|-----------|-------|----------|-----------|---------|
@@ -250,49 +235,22 @@ If, perchance, there was an issue of collinearity, we could check the individual
 | 0.519    | 0.001     | 0.010    | 0.404           | 0.020           | 0.001   | 0.041    | 0.003            |
 | 0.325    | 0.015     | 0.009    | 0.296           | 0.060           | 0.014   | 0.010    | 0.184            |
 
-```{r, include=FALSE}
-round(ols_eigen_cindex(model), 3)
-```
-
 With all the information provided, we then conclude, with confidence, that multicollinearity is not a problem of this dataset.
 
 ### Variable Selection
 
-We now move on to selecting variables to use in our final model. We will perfrom this using forward, backward, and step-wise selection, using both AIC and BIC, and reporting the LOO-CV RMSE and adjusted $R^2$ for each model to determine which model is the best.
+We now move on to selecting variables to use in our final model. We will perform this using forward, backward, and step-wise selection (code 9), using both AIC and BIC, and reporting the LOO-CV RMSE and adjusted $R^2$ for each model to determine which model is the best (code 10).
 
 ```{r, include=FALSE}
 n = nrow(data)
 mod_all_preds = lm(price~., data=data)
 mod_back_aic = step(mod_all_preds, direction='backward')
-```
-
-```{r, include=FALSE}
-n = nrow(data)
 mod_all_preds = lm(price~., data=data)
 mod_back_bic = step(mod_all_preds, direction='backward', k=log(n))
-```
-
-```{r, include=FALSE}
-n = nrow(data)
 mod_start = lm(price~1, data=data)
 mod_forwd_aic = step(mod_start, scope=price~mainroad+area+parking+prefarea+guestroom+basement+airconditioning+bathrooms+bedrooms+stories+hotwaterheating+furnishingstatus, direction='forward')
-```
-
-```{r, include=FALSE}
-n = nrow(data)
-mod_start = lm(price~1, data=data)
 mod_forwd_bic = step(mod_start, scope=price~mainroad+area+parking+prefarea+guestroom+basement+airconditioning+bathrooms+bedrooms+stories+hotwaterheating+furnishingstatus, direction='forward', k=log(n))
-```
-
-```{r, include=FALSE}
-n = nrow(data)
-mod_start = lm(price~1, data=data)
 mod_step_aic = step(mod_start, scope=price~mainroad+area+parking+prefarea+guestroom+basement+airconditioning+bathrooms+bedrooms+stories+hotwaterheating+furnishingstatus, direction='both')
-```
-
-```{r, include=FALSE}
-n = nrow(data)
-mod_start = lm(price~1, data=data)
 mod_step_bic = step(mod_start, scope=price~mainroad+area+parking+prefarea+guestroom+basement+airconditioning+bathrooms+bedrooms+stories+hotwaterheating+furnishingstatus, direction='both', k=log(n))
 ```
 
@@ -331,7 +289,7 @@ In order to remove problematic data points from the data set, we must perform a 
 
 #### Constant Variance Assumption
 
-To verify that our model follows the constant variance assumption, we will be using the Breush-Pagan test at a significance level of $\alpha = .05$. Our null and alternative hypotheses are $H_0$: Homoscedastic errors and $H_1$: Heteroscedastic errors.
+To verify that our model follows the constant variance assumption, we will be using the Breush-Pagan test (code 11) at a significance level of $\alpha = .05$. Our null and alternative hypotheses are $H_0$: Homoscedastic errors and $H_1$: Heteroscedastic errors.
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 library(olsrr)
@@ -345,7 +303,7 @@ The value of our test-statistic is 68.416 and our $p$-value is $1.569\times e^{-
 
 #### Normality Assumption
 
-In order to check the normality assumption, we will be performing the Shapiro-Wilk test at the $\alpha = .05$ significance level. Our null and alternative hypotheses are $H_0$: The errors are normally distributed and $H_1$: The errors are not normally distributed.
+In order to check the normality assumption, we will be performing the Shapiro-Wilk test (code 12) at the $\alpha = .05$ significance level. Our null and alternative hypotheses are $H_0$: The errors are normally distributed and $H_1$: The errors are not normally distributed.
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 shapiro.test(resid(model))
@@ -353,7 +311,7 @@ shapiro.test(resid(model))
 
 The value of our test-statistic is .95399 and our $p$-value is $5.31 \times e^{-12}$. We reject the null hypothesis at the $\alpha = .05$ significance level and conclude that errors are not normally distributed.
 
-In order to try to correct for this, we will be using the Box-Cox method.
+In order to try to correct for this, we will be using the Box-Cox method (code 13).
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 library(MASS)
@@ -361,7 +319,7 @@ bc = boxcox(model, lambda = seq(-0.25, 0.75, by = 0.05), plotit = TRUE)
 bc$x[which.max(bc$y)]
 ```
 
-According to the plot, and the print out, we can tell that $\hat{\lambda} = .05303$. So we will be performing an OLS regression with $\text{price}^{.05303}$ as the response and performing the Shapiro-Wilk test at the $\alpha = .05$ significance level.
+According to the plot, and the print out, we can tell that $\hat{\lambda} = .05303$. So we will be performing an OLS regression with $\text{price}^{.05303}$ as the response and performing the Shapiro-Wilk test at the $\alpha = .05$ significance level (code 14).
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 
@@ -371,22 +329,13 @@ shapiro.test(resid(model_bc))
 
 The value of our test-statistic is 0.9953 and our $p$-value is 0.0939. We accept the null hypothesis at the $\alpha = .05$ significance level and conclude that the errors are now normally distributed.
 
-We will also check the RMSE and the percent variation in price explained by both models.
+We will also check the RMSE and the percent variation in price explained by both models (code 15).
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE, include=FALSE}
-#RMSE of normal model
 sqrt(mean((data$price - predict(model))^2))
-
-# RMSE of the model with transformed response
 sqrt(mean((data$price - predict(model_bc)^(1/0.05303))^2))
-
-# sum of square totals for price
 SST = sum((data$price - mean(data$price))^2)
-
-# percent of variation in price explained by the model 
 1 - sum((data$price - predict(model))^2) / SST
-
-# percent of variation in species explained by the transformed model 
 1 - sum((data$price - predict(model_bc)^(1/0.05303))^2) / SST
 ```
 
@@ -397,21 +346,15 @@ SST = sum((data$price - mean(data$price))^2)
 
 Since our errors are now normally distributed, we will use the transformed model instead of the standard model.
 
-#### Linearity Assumption
-
-```{r echo=FALSE, fig.height=3, fig.width=3, message=FALSE, warning=FALSE, include=FALSE}
-ols_plot_added_variable(model)
-```
-
-It is clear that there is some linear relationship between the response and the numerical predictors (area, bathrooms, bedrooms, stories, parking).
-
 #### Highly Influential Points
+
+To check for highly influential points, we will be checking the cooks distances of the data (code 16).
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 length(which(cooks.distance(model_bc) > 4 / length(cooks.distance(model_bc))))
 ```
 
-To check for highly influential points, we will be checking the cooks distances of the data. Using this distance, we find that there are 35 highly influential points. We will check to see if removing these points from the model will in any way correct our models assumption violations. First we will check the constant variance assumption at the $\alpha$ = .05 significance level.
+Using this distance, we find that there are 35 highly influential points. We will check to see if removing these points from the model will in any way correct our models assumption violations. First we will check the constant variance assumption at the $\alpha$ = .05 significance level (code 17).
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 noninfluential_ids = which(
@@ -426,7 +369,7 @@ bptest(model_fix)
 
 The value of our test-statistic is 31.917 and our $p$-value is .00247. We reject the null hypothesis at the $\alpha = .05$ significance level and conclude that constant variance assumption is violated.
 
-Next we will check our constant variance assumption at the $\alpha$ = .05 significance level.
+Next we will check our constant variance assumption at the $\alpha$ = .05 significance level (code 18).
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 shapiro.test(resid(model_fix))
@@ -434,7 +377,7 @@ shapiro.test(resid(model_fix))
 
 The value of our test-statistic is .9987 and our $p$-value is .9681. We accept the null hypothesis at the $\alpha = .05$ significance level and conclude that errors are still normally distributed.
 
-We will also check the $R^2$ of both models,
+We will also check the $R^2$ of both models (code 19),
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 
@@ -452,7 +395,7 @@ It is clear that the Model with Influential Points removed is the preferred mode
 
 #### Outliers
 
-To check for outliers we will be using the studentized residuals at the $\alpha$ = .05 significance level.
+To check for outliers we will be using the studentized residuals at the $\alpha$ = .05 significance level (code 20).
 
 ```{r, echo=FALSE, message = FALSE, warning = FALSE}
 outlier_test_cutoff = function(model_bc, alpha = 0.05) {
@@ -470,25 +413,18 @@ We can see that there are zero outliers, so we move on. Our model now has normal
 
 ### Weighted Least Squares (WLS)
 
-We now begin performing the weighted least squares regression. We create a model using the absolute values of the residual and then calculate weights as $\frac{1}{fitted values^2}$ . We then create our model with these weights.
+We now begin performing the weighted least squares regression. We create a model using the absolute values of the residual and then calculate weights as $\frac{1}{fitted values^2}$ . We then create our model with these weights (code 21).
 
 ```{r, include=FALSE}
 model_wts = lm(abs(resid(model_fix)) ~ ., data = data[noninfluential_ids,])
-coef(model_wts)
-```
-
-```{r, include=FALSE}
 weights = 1 / (fitted(model_wts)^2)
 model_wls = lm(price^ 0.05303 ~ ., data=data[noninfluential_ids,], weights = weights)
 ```
 
-After creating our model, we will perform a t-test at the 5% significance for each parameter for the OLS model and the WLS model.
+After creating our model, we will perform a t-test at the 5% significance for each parameter for the OLS model and the WLS model (code 22).
 
 ```{r, include=FALSE}
 summary(model_fix)$coef
-```
-
-```{r, include=FALSE}
 summary(model_wls)$coef
 ```
 
@@ -532,19 +468,21 @@ Below are the estimates and p-values for the WLS regression:
 
 For both OLS and WLS, every variable is significant except furnishing status semi-furnished.
 
-We now summarize both the OLS model and WLS model to see the $R^2$ scores and how they compare.
+We now summarize both the OLS model and WLS model to see the $R^2$ scores and how they compare (code 23).
 
 ```{r, include=FALSE}
 summary(model_fix)$r.squared
 summary(model_wls)$r.squared
+sqrt(mean((data[noninfluential_ids,]$price - predict(model_fix)^(1/0.05303))^2))
+sqrt(mean((data[noninfluential_ids,]$price - predict(model_wls)^(1/0.05303))^2))
 ```
 
-| Model | $R^2$ |
-|-------|-------|
-| OLS   | 0.765 |
-| WLS   | 0.786 |
+| Model | $R^2$ | RMSE     |
+|-------|-------|----------|
+| OLS   | 0.765 | 824504.7 |
+| WLS   | 0.786 | 843030.6 |
 
-After finding the $R^2$ score of each regression, we see that WLS has a better score. Therefore, we will choose the WLS model as the better model because it has a higher percentage of the variance of price being explained by the model.
+After finding the $R^2$ score and RMSE of each regression, we see that WLS has a better $R^2$ score and OLS has a better RMSE. We recall that our goal of this report is to find the model which best explains the variance in the price of houses. Therefore, we will choose the WLS model as the better model because it has a higher $R^2$ score and thus a higher percentage of the variance of price being explained by the model (code 24).
 
 ```{r, include=FALSE}
 summary(model_wls)$coef
@@ -552,15 +490,15 @@ summary(model_wls)$coef
 
 After performing collinearity tests, variable selection, model transformations, model diagnostics, and WLS, we are left with our final regression model with the final equation:
 
-$$\text{Price}_i = 2.14 + 0.00000580 \, \text{area}_i + 0.00290 \, \text{bedrooms}_i + 0.0202 \, \text{bathrooms}_i + 0.0103 \, \text{stories}_i + 0.0129 \, \text{mainroad}_i\text{yes}$$ $$+0.00822 \, \text{guestroom}_i\text{yes} + 0.00752 \, \text{basement}_i\text{yes} + 0.0189 \, \text{hotwaterheating}_i\text{yes} + 0.0206 \, \text{airconditioning}_i\text{yes}$$ $$+0.00469 \, \text{parking}_i + 0.0157 \, \text{prefarea}_i\text{yes} + 0.00134 \, \text{furnishingstatus}_i\text{semi-furnished} - 0.0131 \, \text{furnishingstatus}_i\text{unfurnished}$$
+$$\text{Price}_i^{.05303} = 2.14 + 0.00000580 \, \text{area}_i + 0.00290 \, \text{bedrooms}_i + 0.0202 \, \text{bathrooms}_i + 0.0103 \, \text{stories}_i + 0.0129 \, \text{mainroad}\text{yes}_i$$ $$+0.00822 \, \text{guestroom}\text{yes}_i + 0.00752 \, \text{basement}\text{yes}_i + 0.0189 \, \text{hotwaterheating}\text{yes}_i + 0.0206 \, \text{airconditioning}\text{yes}_i$$ $$+0.00469 \, \text{parking}_i + 0.0157 \, \text{prefarea}\text{yes}_i + 0.00134 \, \text{furnishingstatus}\text{-semi-furnished}_i - 0.0131 \, \text{furnishingstatus}\text{-unfurnished}_i$$
 
 ### Section 3: Discussion
 
-insert discussion here
+Our final model has all 12 of the original predictors, has transformed the response as being $\text{Price}_i^{.05303}$, has removed points that are deemed highly influential, and has applied the weights of $\frac{1}{fitted values^2}$ to perform a weighted least squares regression. Our original, standard OLS model had an $R^2$ score of 0.68 and our final model has an $R^2$ score of 0.786. We see that this model is much better than our original model and is far better at explaining the variance in price of each house. We also notice that our prediction that the variable "area" would be a large factor in the model is correct, as we can see it has a far lower p-value than any other variable in the model (1.616203e-30). With this revised model, we can more accurately explain the change of the prices of houses from this dataset when we are able to observe attributes of the house that we worked with in this dataset. This model can be used to predict the prices of houses in India if we had access to the 12 predictors that were used in this dataset and is a good way to learn the trends of the Indian housing market as it correlates to features of a house.
 
 ### Section 4: Limitations
 
-There were some issues with the data set. The first is that we were expecting collinearity in variables number of bedrooms and number of bathrooms. However there was no collinearity between these variables. This points to the fact that the data may be flawed in some way. Perhaps the dataset is artificially created or random since in real life the number of bedrooms and bathrooms should be correlated in some way. Also, we would add more columns to this data set such as location, proximity to major city, and the average income of each location. These variables are important because a house near the city will cost much more than a house in a rural area. It would be easier to predict housing prices given the location of the house and the proximity to a major city.
+There were some issues with the data set. The first is that we were expecting collinearity in the variables stories and area, however there was no collinearity between these variables. This points to the fact that the data may be flawed in some way. Perhaps the dataset is artificially created or random since in real life the number of stories and total area of a house should be correlated in some way. Also, we would add more columns to this data set such as location, proximity to major city, and the average income of each location. These variables are important because a house near the city will cost much more than a house in a rural area. It would be easier to predict housing prices given the location of the house and the proximity to a major city. Another limitation of our dataset came from the predictor "prefarea". We don't know what defines an area to be "preferred", so there is no telling what this variable means. Also, as noted earlier, since we can get a good grasp on the precise location these houses are in, we can't advise that our model can be used for real-life predictions because every region has different housing markets.
 
 ### Section 5: Conclusions
 
@@ -580,8 +518,281 @@ This project not only enhanced our understanding of the housing market dynamics 
 
 ### Section 6: Additional Work
 
-Additional work here
+Some additional work to add is the performing of variable selection again after transforming our model and removing influential points. We will run step-wise variable selection using BIC as our metric and report the adjusted $R^2$ of new model versus our previous model (code 25).
+
+```{r, include=FALSE}
+n=nrow(data[noninfluential_ids,])
+mod_start2 = lm(price^0.05303~1, data=data[noninfluential_ids,])
+mod_step_bic2 = step(mod_start2, scope=price^0.05303~mainroad+area+parking+prefarea+guestroom+basement+airconditioning+bathrooms+bedrooms+stories+hotwaterheating+furnishingstatus, direction='both', k=log(n))
+summary(mod_step_bic2)$adj.r.squared
+summary(model_fix)$adj.r.squared
+```
+
+| Model                                   | Adjusted $R^2$  |
+|-----------------------------------------|-----------------|
+| Original Model                          | 0.759           |
+| New Model (after variable selection #2) | 0.757           |
+
+As we can see, our metric has not improved, hence why we didn't include a second round of variable selection.
 
 ### Code Appendix
 
-Code appendix here
+Code 1:
+
+```{r, eval=FALSE}
+data <- read.csv('Housing.csv')
+head(data, 5)
+```
+
+Code 2:
+
+```{r, eval=FALSE}
+library(dplyr)
+hist(data$price, xlab="Price of House", ylab="Frequency", 
+     main='Histogram of Price' ,col="purple")
+price_summary <- data %>%
+  summarise(
+    Min = min(price, na.rm = TRUE),
+    Q1 = quantile(price, 0.25, na.rm = TRUE),
+    Median = median(price, na.rm = TRUE),
+    Mean = mean(price, na.rm = TRUE),
+    Q3 = quantile(price, 0.75, na.rm = TRUE),
+    Max = max(price, na.rm = TRUE),
+    NA_Count = sum(is.na(price))
+  )
+print(price_summary)
+```
+
+Code 3:
+
+```{r, eval=FALSE}
+plot(data$area, data$price, xlab='Area', ylab='Price', main='Price vs. Area', col='blue')
+```
+
+Code 4:
+
+```{r, eval=FALSE}
+library(dplyr)
+library(corrplot)
+library(forcats)
+data <- data %>%
+  mutate(across(where(is.character), as.factor))
+data_encoded <- data %>%
+  mutate(across(where(~is.factor(.) && nlevels(.) <= 3), as.integer))
+data_numeric_only <- data_encoded %>%
+  select(where(is.numeric))
+housing_preds <- select(data_numeric_only, -price)
+cor_matrix <- cor(housing_preds, use = "complete.obs")
+corrplot(cor_matrix, method = 'color', order = 'hclust', diag = FALSE,
+         number.cex = 0.7, addCoef.col = 'black', tl.pos = 'd', tl.cex = 0.6, 
+         cl.cex = 0.7, cl.pos = 'r')
+```
+
+Code 5:
+
+```{r, eval=FALSE}
+pairs(housing_preds, col = 'dodgerblue', pch=1)
+library(olsrr)
+model = lm(price ~ ., data = data_numeric_only)
+round(ols_eigen_cindex(model)[, 1:2], 4)
+```
+
+Code 6:
+
+```{r, eval=FALSE}
+library(faraway)
+vif(model)
+```
+
+Code 7:
+
+```{r, eval=FALSE}
+1 - 1/vif(model)
+```
+
+Code 8:
+
+```{r, eval=FALSE}
+round(ols_eigen_cindex(model), 3)
+```
+
+Code 9:
+
+```{r, eval=FALSE}
+n = nrow(data)
+mod_all_preds = lm(price~., data=data)
+mod_back_aic = step(mod_all_preds, direction='backward')
+n = nrow(data)
+mod_all_preds = lm(price~., data=data)
+mod_back_bic = step(mod_all_preds, direction='backward', k=log(n))
+n = nrow(data)
+mod_start = lm(price~1, data=data)
+mod_forwd_aic = step(mod_start, scope=price~mainroad+area+parking+prefarea
+                     +guestroom+basement+airconditioning+bathrooms+bedrooms+stories
+                     +hotwaterheating+furnishingstatus, direction='forward')
+n = nrow(data)
+mod_start = lm(price~1, data=data)
+mod_forwd_bic = step(mod_start, scope=price~mainroad+area+parking+prefarea
+                     +guestroom+basement+airconditioning+bathrooms+bedrooms+stories
+                     +hotwaterheating+furnishingstatus, direction='forward', k=log(n))
+n = nrow(data)
+mod_start = lm(price~1, data=data)
+mod_step_aic = step(mod_start, scope=price~mainroad+area+parking+prefarea+guestroom
+                    +basement+airconditioning+bathrooms+bedrooms+stories
+                    +hotwaterheating+furnishingstatus, direction='both')
+n = nrow(data)
+mod_start = lm(price~1, data=data)
+mod_step_bic = step(mod_start, scope=price~mainroad+area+parking+prefarea+guestroom
+                    +basement+airconditioning+bathrooms+bedrooms+stories
+                    +hotwaterheating+furnishingstatus, direction='both', k=log(n))
+```
+
+Code 10:
+
+```{r, eval=FALSE}
+calc_loocv_rmse = function(model) {
+  sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
+}
+calc_loocv_rmse(mod_back_aic)
+calc_loocv_rmse(mod_back_bic)
+calc_loocv_rmse(mod_forwd_aic)
+calc_loocv_rmse(mod_forwd_bic)
+calc_loocv_rmse(mod_step_aic)
+calc_loocv_rmse(mod_step_bic)
+summary(mod_back_aic)$adj.r.squared
+summary(mod_back_bic)$adj.r.squared
+summary(mod_forwd_aic)$adj.r.squared
+summary(mod_forwd_bic)$adj.r.squared
+summary(mod_step_aic)$adj.r.squared
+summary(mod_step_bic)$adj.r.squared
+```
+
+Code 11:
+
+```{r, eval=FALSE}
+library(olsrr)
+library(lmtest)
+model = lm(price = ., data = data)
+bptest(model)
+```
+
+Code 12:
+
+```{r, eval=FALSE}
+shapiro.test(resid(model))
+```
+
+Code 13:
+
+```{r, eval=FALSE}
+library(MASS)
+bc = boxcox(model, lambda = seq(-0.25, 0.75, by = 0.05), plotit = TRUE)
+bc$x[which.max(bc$y)]
+```
+
+Code 14:
+
+```{r, eval=FALSE}
+model_bc = lm(price ^ 0.05303 ~ . , data = data)
+shapiro.test(resid(model_bc))
+```
+
+Code 15:
+
+```{r, eval=FALSE}
+sqrt(mean((data$price - predict(model))^2))
+sqrt(mean((data$price - predict(model_bc)^(1/0.05303))^2))
+SST = sum((data$price - mean(data$price))^2)
+1 - sum((data$price - predict(model))^2) / SST
+1 - sum((data$price - predict(model_bc)^(1/0.05303))^2) / SST
+```
+
+Code 16:
+
+```{r, eval=FALSE}
+length(which(cooks.distance(model_bc) > 4 / length(cooks.distance(model_bc))))
+```
+
+Code 17:
+
+```{r, eval=FALSE}
+noninfluential_ids = which(
+    cooks.distance(model_bc) <= 4/ length(cooks.distance(model_bc)))
+model_fix = lm(price^ 0.05303 ~ ., 
+               data = data,
+               subset = noninfluential_ids)
+bptest(model_fix)
+```
+
+Code 18:
+
+```{r, eval=FALSE}
+shapiro.test(resid(model_fix))
+```
+
+Code 19:
+
+```{r, eval=FALSE}
+summary(model)$r.squared
+
+summary(model_fix)$r.squared
+
+```
+
+Code 20:
+
+```{r, eval=FALSE}
+outlier_test_cutoff = function(model_bc, alpha = 0.05) {
+    n = length(resid(model_bc))
+    qt(alpha/(2 * n), df = df.residual(model_bc) - 1, lower.tail = FALSE)
+}
+
+cutoff = outlier_test_cutoff(model_bc, alpha = 0.05)
+
+length(which(abs(rstudent(model_bc)) > cutoff))
+
+```
+
+Code 21:
+
+```{r, eval=FALSE}
+model_wts = lm(abs(resid(model_fix)) ~ ., data = data[noninfluential_ids,])
+coef(model_wts)
+weights = 1 / (fitted(model_wts)^2)
+model_wls = lm(price^ 0.05303 ~ ., data=data[noninfluential_ids,], weights = weights)
+```
+
+Code 22:
+
+```{r, eval=FALSE}
+summary(model_fix)$coef
+summary(model_wls)$coef
+```
+
+Code 23:
+
+```{r, eval=FALSE}
+summary(model_fix)$r.squared
+summary(model_wls)$r.squared
+sqrt(mean((data[noninfluential_ids,]$price - predict(model_fix)^(1/0.05303))^2))
+sqrt(mean((data[noninfluential_ids,]$price - predict(model_wls)^(1/0.05303))^2))
+
+```
+
+Code 24:
+
+```{r, eval=FALSE}
+summary(model_wls)$coef
+```
+
+Code 25:
+
+```{r, eval=FALSE}
+n=nrow(data[noninfluential_ids,])
+mod_start2 = lm(price^0.05303~1, data=data[noninfluential_ids,])
+mod_step_bic2 = step(mod_start2, scope=price^0.05303~mainroad+area+parking+prefarea
+                     +guestroom+basement+airconditioning+bathrooms+bedrooms+stories
+                     +hotwaterheating+furnishingstatus, direction='both', k=log(n))
+summary(mod_step_bic2)$adj.r.squared
+summary(model_fix)$adj.r.squared
+```
