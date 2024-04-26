@@ -479,7 +479,7 @@ coef(model_wts)
 
 ```{r, include=FALSE}
 weights = 1 / (fitted(model_wts)^2)
-model_wls = lm(price ~ ., data=data[noninfluential_ids,], weights = weights)
+model_wls = lm(price^ 0.05303 ~ ., data=data[noninfluential_ids,], weights = weights)
 ```
 
 After creating our model, we will perform a t-test at the 5% significance for each parameter for the OLS model and the WLS model.
@@ -513,24 +513,24 @@ Below are the estimates and p-values for the OLS regression:
 
 Below are the estimates and p-values for the WLS regression:
 
-| Coefficient                    | Estimate  | P-value   |
-|:-------------------------------|:----------|:----------|
-| Intercept                      | 2.03e+05  | 0.315     |
-| area                           | 236       | 4.09e-29  |
-| bedrooms                       | 5.94e+04  | 0.312     |
-| bathrooms                      | 9.73e+05  | 1.90e-31  |
-| stories                        | 4.46e+05  | 1.83e-17  |
-| mainroadyes                    | 4.14e+05  | 0.0000875 |
-| guestroomyes                   | 3.14e+05  | 0.00219   |
-| basementyes                    | 2.02e+05  | 0.0186    |
-| hotwaterheatingyes             | 8.42e+05  | 5.62e-07  |
-| airconditioningyes             | 8.47e+05  | 1.69e-22  |
-| parking                        | 2.31e+05  | 1.50e-06  |
-| prefareayes                    | 6.59e+05  | 1.33e-13  |
-| furnishingstatussemi-furnished | -15.5e+03 | 0.860     |
-| furnishingstatusunfurnished    | -3.71e+05 | 0.000411  |
+| Coefficient                    | Estimate      | P-value      |
+|:-------------------------------|:--------------|:-------------|
+| Intercept                      | 2.140940e+00  | 0.000000e+00 |
+| area                           | 5.801192e-06  | 1.616203e-30 |
+| bedrooms                       | 2.901672e-03  | 3.903794e-02 |
+| bathrooms                      | 2.021508e-02  | 6.941308e-25 |
+| stories                        | 1.031211e-02  | 1.608922e-16 |
+| mainroadyes                    | 1.292915e-02  | 3.337035e-07 |
+| guestroomyes                   | 8.219860e-03  | 8.126159e-04 |
+| basementyes                    | 7.518584e-03  | 2.664939e-04 |
+| hotwaterheatingyes             | 1.890570e-02  | 2.471119e-06 |
+| airconditioningyes             | 2.060580e-02  | 3.670600e-23 |
+| parking                        | 4.690907e-03  | 4.059220e-05 |
+| prefareayes                    | 1.569487e-02  | 1.598082e-13 |
+| furnishingstatussemi-furnished | 1.335054e-03  | 5.229621e-01 |
+| furnishingstatusunfurnished    | -1.313332e-02 | 2.004748e-07 |
 
-For OLS every variable is significant except furnishing status semi-furnished. For WLS every variable is significant except bedrooms and furnishing status semi-furnished.
+For both OLS and WLS, every variable is significant except furnishing status semi-furnished.
 
 We now summarize both the OLS model and WLS model to see the $R^2$ scores and how they compare.
 
@@ -542,6 +542,46 @@ summary(model_wls)$r.squared
 | Model | $R^2$ |
 |-------|-------|
 | OLS   | 0.765 |
-| WLS   | 0.778 |
+| WLS   | 0.786 |
 
-After finding the $R^2$ score of each regression, we see that WLS has a better score. We
+After finding the $R^2$ score of each regression, we see that WLS has a better score. Therefore, we will choose the WLS model as the better model because it has a higher percentage of the variance of price being explained by the model.
+
+```{r, include=FALSE}
+summary(model_wls)$coef
+```
+
+After performing collinearity tests, variable selection, model transformations, model diagnostics, and WLS, we are left with our final regression model with the final equation:
+
+$$\text{Price}_i = 2.14 + 0.00000580 \, \text{area}_i + 0.00290 \, \text{bedrooms}_i + 0.0202 \, \text{bathrooms}_i + 0.0103 \, \text{stories}_i + 0.0129 \, \text{mainroad}_i\text{yes}$$ $$+0.00822 \, \text{guestroom}_i\text{yes} + 0.00752 \, \text{basement}_i\text{yes} + 0.0189 \, \text{hotwaterheating}_i\text{yes} + 0.0206 \, \text{airconditioning}_i\text{yes}$$ $$+0.00469 \, \text{parking}_i + 0.0157 \, \text{prefarea}_i\text{yes} + 0.00134 \, \text{furnishingstatus}_i\text{semi-furnished} - 0.0131 \, \text{furnishingstatus}_i\text{unfurnished}$$
+
+### Section 3: Discussion
+
+insert discussion here
+
+### Section 4: Limitations
+
+There were some issues with the data set. The first is that we were expecting collinearity in variables number of bedrooms and number of bathrooms. However there was no collinearity between these variables. This points to the fact that the data may be flawed in some way. Perhaps the dataset is artificially created or random since in real life the number of bedrooms and bathrooms should be correlated in some way. Also, we would add more columns to this data set such as location, proximity to major city, and the average income of each location. These variables are important because a house near the city will cost much more than a house in a rural area. It would be easier to predict housing prices given the location of the house and the proximity to a major city.
+
+### Section 5: Conclusions
+
+This study successfully identified key predictors that influence house prices using a comprehensive dataset of 545 observations in India. Through rigorous statistical testing and modeling, we concluded that variables such as area, number of bathrooms, air conditioning, and location in a preferred area significantly impact house prices. The robustness of our results was ensured by addressing potential multicollinearity, which was not found to be problematic in our dataset.
+
+From the model diagnostics, it became evident that the assumptions of homoscedasticity and normality were initially violated. However, through transformations and the removal of influential points, these issues were substantially mitigated, leading to a more reliable model. Ultimately, the Weighted Least Squares (WLS) model proved superior, explaining a higher percentage of variance in house prices than the Ordinary Least Squares (OLS) model.
+
+#### Future Work:
+
+Expanding the Dataset: Further research could benefit from including more variables, such as the age of the house, recent renovations, and proximity to essential services, which might provide deeper insights into price determinants.
+
+-   Advanced Modeling Techniques: Employing more sophisticated regression techniques or machine learning models could potentially uncover non-linear relationships or interactions between predictors that were not explored in this study.
+
+-   Cross-Validation: Implementing more rigorous cross-validation techniques could enhance the generalizability of the model to other regions or different housing markets.
+
+This project not only enhanced our understanding of the housing market dynamics but also equipped us with valuable modeling techniques that can be applied to other economic sectors.
+
+### Section 6: Additional Work
+
+Additional work here
+
+### Code Appendix
+
+Code appendix here
