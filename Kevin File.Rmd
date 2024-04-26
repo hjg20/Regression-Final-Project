@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = TRUE)
 In this project, we are working with a dataset observing the prices of houses and corresponding attributes of each house in India. Below are the attributes of each house recorded in the dataset:
 
 | Attribute               | Description                                     | Data Type |
-|------------------|------------------------------------|------------------|
+|------------------|-----------------------------------|------------------|
 | [**price**]{.underline} | Price of the houses in rupees.                  | Integer   |
 | area                    | Area of a house in square feet                  | Integer   |
 | bedrooms                | Number of bedrooms in house                     | Integer   |

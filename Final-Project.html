@@ -1639,9 +1639,9 @@ specific house. Below are the attributes of each house recorded in the
 dataset:</p>
 <table>
 <colgroup>
-<col width="24%" />
-<col width="50%" />
-<col width="24%" />
+<col width="26%" />
+<col width="47%" />
+<col width="26%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -1722,19 +1722,146 @@ unfurnished)</td>
 <p>The majority of our predictors in this dataset are of type boolean,
 with the remainders being integers and one categorical predictor
 comprising of strings. Below is the first 5 lines of our dataset:</p>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["price"],"name":[1],"type":["int"],"align":["right"]},{"label":["area"],"name":[2],"type":["int"],"align":["right"]},{"label":["bedrooms"],"name":[3],"type":["int"],"align":["right"]},{"label":["bathrooms"],"name":[4],"type":["int"],"align":["right"]},{"label":["stories"],"name":[5],"type":["int"],"align":["right"]},{"label":["mainroad"],"name":[6],"type":["chr"],"align":["left"]},{"label":["guestroom"],"name":[7],"type":["chr"],"align":["left"]},{"label":["basement"],"name":[8],"type":["chr"],"align":["left"]},{"label":["hotwaterheating"],"name":[9],"type":["chr"],"align":["left"]},{"label":["airconditioning"],"name":[10],"type":["chr"],"align":["left"]},{"label":["parking"],"name":[11],"type":["int"],"align":["right"]},{"label":["prefarea"],"name":[12],"type":["chr"],"align":["left"]},{"label":["furnishingstatus"],"name":[13],"type":["chr"],"align":["left"]}],"data":[{"1":"13300000","2":"7420","3":"4","4":"2","5":"3","6":"yes","7":"no","8":"no","9":"no","10":"yes","11":"2","12":"yes","13":"furnished","_rn_":"1"},{"1":"12250000","2":"8960","3":"4","4":"4","5":"4","6":"yes","7":"no","8":"no","9":"no","10":"yes","11":"3","12":"no","13":"furnished","_rn_":"2"},{"1":"12250000","2":"9960","3":"3","4":"2","5":"2","6":"yes","7":"no","8":"yes","9":"no","10":"no","11":"2","12":"yes","13":"semi-furnished","_rn_":"3"},{"1":"12215000","2":"7500","3":"4","4":"2","5":"2","6":"yes","7":"no","8":"yes","9":"no","10":"yes","11":"3","12":"yes","13":"furnished","_rn_":"4"},{"1":"11410000","2":"7420","3":"4","4":"1","5":"2","6":"yes","7":"yes","8":"yes","9":"no","10":"yes","11":"2","12":"no","13":"furnished","_rn_":"5"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="7%" />
+<col width="12%" />
+<col width="14%" />
+<col width="11%" />
+<col width="12%" />
+<col width="14%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>price</th>
+<th>area</th>
+<th>bedrooms</th>
+<th>bathrooms</th>
+<th>stories</th>
+<th>mainroad</th>
+<th>guestroom</th>
+<th>basement</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>13300000</td>
+<td>7420</td>
+<td>4</td>
+<td>2</td>
+<td>3</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr class="even">
+<td>12250000</td>
+<td>8960</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>yes</td>
+<td>no</td>
+<td>no</td>
+</tr>
+<tr class="odd">
+<td>12250000</td>
+<td>9960</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>yes</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td>12215000</td>
+<td>7500</td>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>yes</td>
+<td>no</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td>11410000</td>
+<td>7420</td>
+<td>4</td>
+<td>1</td>
+<td>2</td>
+<td>yes</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math inline">\(\bigskip\)</span></p>
+<table>
+<colgroup>
+<col width="23%" />
+<col width="23%" />
+<col width="12%" />
+<col width="14%" />
+<col width="25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>hotwaterheating</th>
+<th>airconditioning</th>
+<th>parking</th>
+<th>prefarea</th>
+<th>furnishingstatus</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>no</td>
+<td>yes</td>
+<td>2</td>
+<td>yes</td>
+<td>furnished</td>
+</tr>
+<tr class="even">
+<td>no</td>
+<td>yes</td>
+<td>3</td>
+<td>no</td>
+<td>furnished</td>
+</tr>
+<tr class="odd">
+<td>no</td>
+<td>no</td>
+<td>2</td>
+<td>yes</td>
+<td>semi-furnished</td>
+</tr>
+<tr class="even">
+<td>no</td>
+<td>yes</td>
+<td>3</td>
+<td>yes</td>
+<td>furnished</td>
+</tr>
+<tr class="odd">
+<td>no</td>
+<td>yes</td>
+<td>2</td>
+<td>no</td>
+<td>furnished</td>
+</tr>
+</tbody>
+</table>
 <p>We are attempting to create a linear regression model that best
 explains the variance in the price of the houses using the predictors in
 our dataset. In this report, we will explore our data by finding
 collinearity, outliers, influential points, and by checking error
 assumption violations. We will also discover which variables are the
-most important by using model selection, and test OLS as well as GLS and
-WLS regressions. After doing this, we will combine all the knowledge we
-have gained about our data set in order to find the model in which we
+most important by using variable selection, and test OLS as well as GLS
+and WLS regressions. After doing this, we will combine all the knowledge
+we have gained about our data set in order to find the model in which we
 believe best explains the variance in the price of the houses.</p>
 <p>We will now perform some exploratory data analysis to show the
 distribution of our response variable as well as some key relationships
@@ -1762,12 +1889,12 @@ when we need to go out and purchase a house for ourselves.</p>
 <div id="collinearity" class="section level3">
 <h3>Collinearity</h3>
 <p>In our study of the dataset we must ask ourselves whether or not the
-data is plagued by the issue of collinearity: do the predictors present
+data is plagued by the issue of collinearity. Do the predictors present
 a linear relationship, not just with the response, but within each other
-as well? Collinearity can be deleterious when inspecting a model and
-deciphering its interpretation; inflated R^2 scores and diminished
-p-values are but a few of the problems that arise alongside predictor
-collinearity, as such, the dataset must be tested for it.</p>
+as well? Collinearity can hurt a model’s performance; inflated R^2
+scores and diminished p-values are but a few of the problems that arise
+alongside predictor collinearity… and so, the dataset must be tested for
+it.</p>
 <p>Let us begin by creating a <strong><em>correlation
 heat-map</em></strong> for each predictor. This measures the correlation
 between predictors, and provides us with a visual method of estimating
@@ -1783,11 +1910,6 @@ of 0.37, and by <em>parking</em> and <em>area</em>, with a value of
 0.29. These coefficients are decently small, however we will proceed
 with a more thorough investigation to make sure collinearity is not one
 of this dataset’s problems.</p>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Eigenvalue"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Condition Index"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"11.4591","2":"1.0000"},{"1":"0.5846","2":"4.4275"},{"1":"0.2140","2":"7.3182"},{"1":"0.1537","2":"8.6333"},{"1":"0.1229","2":"9.6550"},{"1":"0.1016","2":"10.6223"},{"1":"0.0886","2":"11.3721"},{"1":"0.0778","2":"12.1358"},{"1":"0.0622","2":"13.5738"},{"1":"0.0569","2":"14.1939"},{"1":"0.0403","2":"16.8673"},{"1":"0.0309","2":"19.2715"},{"1":"0.0075","2":"38.9969"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
 <p>The next step is viewing the dataset’s condition numbers, based on a
 linear model’s (that is using the dataset) values.</p>
 <table>
@@ -1919,7 +2041,7 @@ we can see that, in this dataset, the highest VIF value is 1.478029. We
 could stop, however we wish to make the investigation very thorough.</p>
 <p>We can then check if the variables are orthogonal. An orthogonal
 variable is not plagued by multicollinearity, and has a R^2_k of less
-than 0.3. Below is a table of these values for each predictor</p>
+than 0.3. Below is a table of these values for each predictor:</p>
 <table>
 <thead>
 <tr class="header">
@@ -1979,84 +2101,593 @@ than 0.3. Below is a table of these values for each predictor</p>
 </tbody>
 </table>
 <p>We can see that most predictors are orthogonal, with the exception of
-<em>stories</em>.</p>
+<em>stories</em> which has a value of 0.3234.</p>
 <p>If, perchance, there was an issue of collinearity, we could check the
 individual condition numbers. They would have to be above 30. Each value
 above 30 would signify a singular instance of a problematic linear
 dependence between predictors. Luckily, there is none here, as you can
-see from the values below.</p>
-<div data-pagedtable="false">
-<script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Eigenvalue"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["Condition Index"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["intercept"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["area"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["bedrooms"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["bathrooms"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["stories"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["mainroad"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["guestroom"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["basement"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["hotwaterheating"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["airconditioning"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["parking"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["prefarea"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["furnishingstatus"],"name":[15],"type":["dbl"],"align":["right"]}],"data":[{"1":"11.459","2":"1.000","3":"0.000","4":"0.001","5":"0.000","6":"0.001","7":"0.001","8":"0.000","9":"0.001","10":"0.001","11":"0.000","12":"0.001","13":"0.002","14":"0.001","15":"0.001"},{"1":"0.585","2":"4.428","3":"0.000","4":"0.003","5":"0.000","6":"0.000","7":"0.001","8":"0.000","9":"0.001","10":"0.001","11":"0.000","12":"0.000","13":"0.775","14":"0.001","15":"0.007"},{"1":"0.214","2":"7.318","3":"0.000","4":"0.001","5":"0.004","6":"0.036","7":"0.340","8":"0.001","9":"0.012","10":"0.058","11":"0.001","12":"0.013","13":"0.005","14":"0.014","15":"0.034"},{"1":"0.154","2":"8.633","3":"0.001","4":"0.070","5":"0.000","6":"0.008","7":"0.008","8":"0.000","9":"0.030","10":"0.046","11":"0.007","12":"0.011","13":"0.093","14":"0.032","15":"0.423"},{"1":"0.123","2":"9.655","3":"0.000","4":"0.467","5":"0.005","6":"0.108","7":"0.001","8":"0.004","9":"0.033","10":"0.128","11":"0.001","12":"0.018","13":"0.052","14":"0.029","15":"0.014"},{"1":"0.102","2":"10.622","3":"0.000","4":"0.177","5":"0.004","6":"0.472","7":"0.093","8":"0.001","9":"0.020","10":"0.007","11":"0.003","12":"0.156","13":"0.040","14":"0.058","15":"0.004"},{"1":"0.089","2":"11.372","3":"0.000","4":"0.011","5":"0.003","6":"0.006","7":"0.083","8":"0.002","9":"0.029","10":"0.000","11":"0.003","12":"0.475","13":"0.005","14":"0.419","15":"0.013"},{"1":"0.078","2":"12.136","3":"0.000","4":"0.096","5":"0.000","6":"0.180","7":"0.123","8":"0.002","9":"0.271","10":"0.001","11":"0.009","12":"0.233","13":"0.000","14":"0.265","15":"0.006"},{"1":"0.062","2":"13.574","3":"0.006","4":"0.001","5":"0.046","6":"0.087","7":"0.017","8":"0.027","9":"0.363","10":"0.047","11":"0.157","12":"0.007","13":"0.014","14":"0.097","15":"0.205"},{"1":"0.057","2":"14.194","3":"0.004","4":"0.121","5":"0.014","6":"0.030","7":"0.138","8":"0.028","9":"0.184","10":"0.586","11":"0.108","12":"0.005","13":"0.000","14":"0.021","15":"0.105"},{"1":"0.040","2":"16.867","3":"0.000","4":"0.000","5":"0.751","6":"0.068","7":"0.147","8":"0.091","9":"0.040","10":"0.107","11":"0.011","12":"0.002","13":"0.000","14":"0.012","15":"0.000"},{"1":"0.031","2":"19.271","3":"0.003","4":"0.053","5":"0.067","6":"0.002","7":"0.041","8":"0.519","9":"0.001","10":"0.010","11":"0.404","12":"0.020","13":"0.001","14":"0.041","15":"0.003"},{"1":"0.008","2":"38.997","3":"0.986","4":"0.001","5":"0.106","6":"0.001","7":"0.008","8":"0.325","9":"0.015","10":"0.009","11":"0.296","12":"0.060","13":"0.014","14":"0.010","15":"0.184"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
-  </script>
-</div>
-<p>To further capture how little multicollinearity there is in this
-dataset, I shall fit a new model with the most ‘multicollineared’
-variable removed. It is <em>stories</em>, since it had the largest VIF
-(larger than 1.4), and the highest condition number (0.32342322, the
-only one that was not orthogonal).</p>
-<pre><code>##                           area                       bedrooms 
-##                       1.317731                       1.200346 
-##                      bathrooms                    mainroadyes 
-##                       1.231924                       1.149071 
-##                   guestroomyes                    basementyes 
-##                       1.208644                       1.220773 
-##             hotwaterheatingyes             airconditioningyes 
-##                       1.040438                       1.141700 
-##                        parking                    prefareayes 
-##                       1.205896                       1.148060 
-## furnishingstatussemi-furnished    furnishingstatusunfurnished 
-##                       1.577584                       1.672505</code></pre>
-<p>We shall see their R^2 values and their RMSE values; if
-multicollinearity is not a problem, they should not alter much.</p>
-<pre class="r"><code>summary(model_fix)</code></pre>
-<pre><code>## 
-## Call:
-## lm(formula = price ~ . - stories, data = data)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -2821126  -714860   -72134   554340  5238228 
-## 
-## Coefficients:
-##                                 Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)                     114252.4   275861.8   0.414 0.678920    
-## area                               231.3       25.3   9.143  &lt; 2e-16 ***
-## bedrooms                        294041.3    70990.3   4.142 4.00e-05 ***
-## bathrooms                      1137403.8   105638.4  10.767  &lt; 2e-16 ***
-## mainroadyes                     563197.8   147042.4   3.830 0.000143 ***
-## guestroomyes                    354946.1   137328.8   2.585 0.010013 *  
-## basementyes                     134670.7   110646.2   1.217 0.224095    
-## hotwaterheatingyes              905645.0   232956.0   3.888 0.000114 ***
-## airconditioningyes             1048110.7   109848.7   9.541  &lt; 2e-16 ***
-## parking                         246000.0    60953.2   4.036 6.24e-05 ***
-## prefareayes                     677105.3   120766.5   5.607 3.32e-08 ***
-## furnishingstatussemi-furnished  -62948.0   121732.7  -0.517 0.605301    
-## furnishingstatusunfurnished    -438934.9   131758.3  -3.331 0.000924 ***
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 1115000 on 532 degrees of freedom
-## Multiple R-squared:  0.6522, Adjusted R-squared:  0.6444 
-## F-statistic: 83.14 on 12 and 532 DF,  p-value: &lt; 2.2e-16</code></pre>
-<pre class="r"><code>summary(model)$adj.r.squared</code></pre>
-<pre><code>## [1] 0.6728527</code></pre>
-<pre class="r"><code>summary(model_fix)$adj.r.squared</code></pre>
-<pre><code>## [1] 0.6443761</code></pre>
-<pre class="r"><code>calc_loocv_rmse = function(model) {
-  sqrt(mean((resid(model) / (1 - hatvalues(model))) ^ 2))
-}
-
-calc_loocv_rmse(model)</code></pre>
-<pre><code>## [1] 1087994</code></pre>
-<pre class="r"><code>calc_loocv_rmse(model_fix)</code></pre>
-<pre><code>## [1] 1134033</code></pre>
-<p>The R^2 changes from 0.6728527 to 0.6443761, not a significant
-change. The RMSE changes from 1087994 to 1134033; more significant of a
-change, with respect to the adjusted R^2, but still not a crucial or
-decising change.</p>
+see from the values below:</p>
+<table style="width:100%;">
+<colgroup>
+<col width="15%" />
+<col width="22%" />
+<col width="14%" />
+<col width="9%" />
+<col width="12%" />
+<col width="14%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Eigenvalue</th>
+<th>Condition Index</th>
+<th>intercept</th>
+<th>area</th>
+<th>bedrooms</th>
+<th>bathrooms</th>
+<th>stories</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>11.459</td>
+<td>1.000</td>
+<td>0.000</td>
+<td>0.001</td>
+<td>0.000</td>
+<td>0.001</td>
+<td>0.001</td>
+</tr>
+<tr class="even">
+<td>0.585</td>
+<td>4.428</td>
+<td>0.000</td>
+<td>0.003</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.001</td>
+</tr>
+<tr class="odd">
+<td>0.214</td>
+<td>7.318</td>
+<td>0.000</td>
+<td>0.001</td>
+<td>0.004</td>
+<td>0.036</td>
+<td>0.340</td>
+</tr>
+<tr class="even">
+<td>0.154</td>
+<td>8.633</td>
+<td>0.001</td>
+<td>0.070</td>
+<td>0.000</td>
+<td>0.008</td>
+<td>0.008</td>
+</tr>
+<tr class="odd">
+<td>0.123</td>
+<td>9.655</td>
+<td>0.000</td>
+<td>0.467</td>
+<td>0.005</td>
+<td>0.108</td>
+<td>0.001</td>
+</tr>
+<tr class="even">
+<td>0.102</td>
+<td>10.622</td>
+<td>0.000</td>
+<td>0.177</td>
+<td>0.004</td>
+<td>0.472</td>
+<td>0.093</td>
+</tr>
+<tr class="odd">
+<td>0.089</td>
+<td>11.372</td>
+<td>0.000</td>
+<td>0.011</td>
+<td>0.003</td>
+<td>0.006</td>
+<td>0.083</td>
+</tr>
+<tr class="even">
+<td>0.078</td>
+<td>12.136</td>
+<td>0.000</td>
+<td>0.096</td>
+<td>0.000</td>
+<td>0.180</td>
+<td>0.123</td>
+</tr>
+<tr class="odd">
+<td>0.062</td>
+<td>13.574</td>
+<td>0.006</td>
+<td>0.001</td>
+<td>0.046</td>
+<td>0.087</td>
+<td>0.017</td>
+</tr>
+<tr class="even">
+<td>0.057</td>
+<td>14.194</td>
+<td>0.004</td>
+<td>0.121</td>
+<td>0.014</td>
+<td>0.030</td>
+<td>0.138</td>
+</tr>
+<tr class="odd">
+<td>0.040</td>
+<td>16.867</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.751</td>
+<td>0.068</td>
+<td>0.147</td>
+</tr>
+<tr class="even">
+<td>0.031</td>
+<td>19.271</td>
+<td>0.003</td>
+<td>0.053</td>
+<td>0.067</td>
+<td>0.002</td>
+<td>0.041</td>
+</tr>
+<tr class="odd">
+<td>0.008</td>
+<td>38.997</td>
+<td>0.986</td>
+<td>0.001</td>
+<td>0.106</td>
+<td>0.001</td>
+<td>0.008</td>
+</tr>
+</tbody>
+</table>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>mainroad</th>
+<th>guestroom</th>
+<th>basement</th>
+<th>hotwaterheating</th>
+<th>airconditioning</th>
+<th>parking</th>
+<th>prefarea</th>
+<th>furnishingstatus</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.000</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.000</td>
+<td>0.001</td>
+<td>0.002</td>
+<td>0.001</td>
+<td>0.001</td>
+</tr>
+<tr class="even">
+<td>0.000</td>
+<td>0.001</td>
+<td>0.001</td>
+<td>0.000</td>
+<td>0.000</td>
+<td>0.775</td>
+<td>0.001</td>
+<td>0.007</td>
+</tr>
+<tr class="odd">
+<td>0.001</td>
+<td>0.012</td>
+<td>0.058</td>
+<td>0.001</td>
+<td>0.013</td>
+<td>0.005</td>
+<td>0.014</td>
+<td>0.034</td>
+</tr>
+<tr class="even">
+<td>0.000</td>
+<td>0.030</td>
+<td>0.046</td>
+<td>0.007</td>
+<td>0.011</td>
+<td>0.093</td>
+<td>0.032</td>
+<td>0.423</td>
+</tr>
+<tr class="odd">
+<td>0.004</td>
+<td>0.033</td>
+<td>0.128</td>
+<td>0.001</td>
+<td>0.018</td>
+<td>0.052</td>
+<td>0.029</td>
+<td>0.014</td>
+</tr>
+<tr class="even">
+<td>0.001</td>
+<td>0.020</td>
+<td>0.007</td>
+<td>0.003</td>
+<td>0.156</td>
+<td>0.040</td>
+<td>0.058</td>
+<td>0.004</td>
+</tr>
+<tr class="odd">
+<td>0.002</td>
+<td>0.029</td>
+<td>0.000</td>
+<td>0.003</td>
+<td>0.475</td>
+<td>0.005</td>
+<td>0.419</td>
+<td>0.013</td>
+</tr>
+<tr class="even">
+<td>0.002</td>
+<td>0.271</td>
+<td>0.001</td>
+<td>0.009</td>
+<td>0.233</td>
+<td>0.000</td>
+<td>0.265</td>
+<td>0.006</td>
+</tr>
+<tr class="odd">
+<td>0.027</td>
+<td>0.363</td>
+<td>0.047</td>
+<td>0.157</td>
+<td>0.007</td>
+<td>0.014</td>
+<td>0.097</td>
+<td>0.205</td>
+</tr>
+<tr class="even">
+<td>0.028</td>
+<td>0.184</td>
+<td>0.586</td>
+<td>0.108</td>
+<td>0.005</td>
+<td>0.000</td>
+<td>0.021</td>
+<td>0.105</td>
+</tr>
+<tr class="odd">
+<td>0.091</td>
+<td>0.040</td>
+<td>0.107</td>
+<td>0.011</td>
+<td>0.002</td>
+<td>0.000</td>
+<td>0.012</td>
+<td>0.000</td>
+</tr>
+<tr class="even">
+<td>0.519</td>
+<td>0.001</td>
+<td>0.010</td>
+<td>0.404</td>
+<td>0.020</td>
+<td>0.001</td>
+<td>0.041</td>
+<td>0.003</td>
+</tr>
+<tr class="odd">
+<td>0.325</td>
+<td>0.015</td>
+<td>0.009</td>
+<td>0.296</td>
+<td>0.060</td>
+<td>0.014</td>
+<td>0.010</td>
+<td>0.184</td>
+</tr>
+</tbody>
+</table>
 <p>With all the information provided, we then conclude, with confidence,
 that multicollinearity is not a problem of this dataset.</p>
+</div>
+<div id="variable-selection" class="section level3">
+<h3>Variable Selection</h3>
+<p>We now move on to selecting variables to use in our final model. We
+will perfrom this using forward, backward, and step-wise selection,
+using both AIC and BIC, and reporting the LOO-CV RMSE and adjusted <span class="math inline">\(R^2\)</span> for each model to determine which
+model is the best.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>LOO-CV RMSE</th>
+<th>Adjusted <span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Backwards AIC</td>
+<td>1087331</td>
+<td>0.6740117</td>
+</tr>
+<tr class="even">
+<td>Backwards BIC</td>
+<td>1090310</td>
+<td>0.6706188</td>
+</tr>
+<tr class="odd">
+<td>Forwards AIC</td>
+<td>1087331</td>
+<td>0.6740117</td>
+</tr>
+<tr class="even">
+<td>Forwards BIC</td>
+<td>1090310</td>
+<td>0.6706188</td>
+</tr>
+<tr class="odd">
+<td>Step-wise AIC</td>
+<td>1087331</td>
+<td>0.6740117</td>
+</tr>
+<tr class="even">
+<td>Step-wise BIC</td>
+<td>1090310</td>
+<td>0.6706188</td>
+</tr>
+</tbody>
+</table>
+<p>After finding all of the values for LOO-CV RMSE and adjusted <span class="math inline">\(R^2\)</span> for each model, we see that the best
+models are the backwards, forwards, and step-wise models that used AIC
+as their metric. All three of these models are the full model with no
+variables removed. Therefore, we will stick with the model containing
+all 12 of the original predictors and move on to model diagnostics.</p>
+</div>
+<div id="model-diagnostics" class="section level2">
+<h2>Model Diagnostics</h2>
+<p>In order to remove problematic data points from the data set, we must
+perform a series of tests to identify them. To begin, we will examine
+our error assumptions to see if any have been violated using graphical
+methods and hypothesis tests.</p>
+<div id="constant-variance-assumption" class="section level4">
+<h4>Constant Variance Assumption</h4>
+<p>To verify that our model follows the constant variance assumption, we
+will be using the Breush-Pagan test at a significance level of <span class="math inline">\(\alpha = .05\)</span>. Our null and alternative
+hypotheses are <span class="math inline">\(H_0\)</span>: Homoscedastic
+errors and <span class="math inline">\(H_1\)</span>: Heteroscedastic
+errors.</p>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  model
+## BP = 68.416, df = 13, p-value = 1.569e-09</code></pre>
+<p>The value of our test-statistic is 68.416 and our <span class="math inline">\(p\)</span>-value is <span class="math inline">\(1.569\times e^{-9}\)</span>. We reject the null
+hypothesis at the <span class="math inline">\(\alpha = .05\)</span>
+significance level and conclude that constant variance assumption is
+violated.</p>
+</div>
+<div id="normality-assumption" class="section level4">
+<h4>Normality Assumption</h4>
+<p>In order to check the normality assumption, we will be performing the
+Shapiro-Wilk test at the <span class="math inline">\(\alpha =
+.05\)</span> significance level. Our null and alternative hypotheses are
+<span class="math inline">\(H_0\)</span>: The errors are normally
+distributed and <span class="math inline">\(H_1\)</span>: The errors are
+not normally distributed.</p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  resid(model)
+## W = 0.95399, p-value = 5.31e-12</code></pre>
+<p>The value of our test-statistic is .95399 and our <span class="math inline">\(p\)</span>-value is <span class="math inline">\(5.31 \times e^{-12}\)</span>. We reject the null
+hypothesis at the <span class="math inline">\(\alpha = .05\)</span>
+significance level and conclude that errors are not normally
+distributed.</p>
+<p>In order to try to correct for this, we will be using the Box-Cox
+method.</p>
+<p><img src="data:image/png;base64,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" width="672" /></p>
+<pre><code>## [1] 0.0530303</code></pre>
+<p>According to the plot, and the print out, we can tell that <span class="math inline">\(\hat{\lambda} = .05303\)</span>. So we will be
+performing an OLS regression with <span class="math inline">\(\text{price}^{.05303}\)</span> as the response and
+performing the Shapiro-Wilk test at the <span class="math inline">\(\alpha = .05\)</span> significance level.</p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  resid(model_bc)
+## W = 0.99525, p-value = 0.0939</code></pre>
+<p>The value of our test-statistic is 0.9953 and our <span class="math inline">\(p\)</span>-value is 0.0939. We accept the null
+hypothesis at the <span class="math inline">\(\alpha = .05\)</span>
+significance level and conclude that the errors are now normally
+distributed.</p>
+<p>We will also check the RMSE and the percent variation in price
+explained by both models.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Model</th>
+<th align="center">RMSE</th>
+<th align="center">% Variation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Standard Model</td>
+<td align="center">1054129</td>
+<td align="center">68</td>
+</tr>
+<tr class="even">
+<td align="center">Transformed Model</td>
+<td align="center">1041366</td>
+<td align="center">69</td>
+</tr>
+</tbody>
+</table>
+<p>Since our errors are now normally distributed, we will use the
+transformed model instead of the standard model.</p>
+</div>
+<div id="linearity-assumption" class="section level4">
+<h4>Linearity Assumption</h4>
+<p>It is clear that there is some linear relationship between the
+response and the numerical predictors (area, bathrooms, bedrooms,
+stories, parking).</p>
+</div>
+<div id="highly-influential-points" class="section level4">
+<h4>Highly Influential Points</h4>
+<pre><code>## [1] 35</code></pre>
+<p>To check for highly influential points, we will be checking the cooks
+distances of the data. Using this distance, we find that there are 35
+highly influential points. We will check to see if removing these points
+from the model will in any way correct our models assumption violations.
+First we will check the constant variance assumption at the <span class="math inline">\(\alpha\)</span> = .05 significance level.</p>
+<pre><code>## 
+##  studentized Breusch-Pagan test
+## 
+## data:  model_fix
+## BP = 31.917, df = 13, p-value = 0.002471</code></pre>
+<p>The value of our test-statistic is 31.917 and our <span class="math inline">\(p\)</span>-value is .00247. We reject the null
+hypothesis at the <span class="math inline">\(\alpha = .05\)</span>
+significance level and conclude that constant variance assumption is
+violated.</p>
+<p>Next we will check our constant variance assumption at the <span class="math inline">\(\alpha\)</span> = .05 significance level.</p>
+<pre><code>## 
+##  Shapiro-Wilk normality test
+## 
+## data:  resid(model_fix)
+## W = 0.99865, p-value = 0.9681</code></pre>
+<p>The value of our test-statistic is .9987 and our <span class="math inline">\(p\)</span>-value is .9681. We accept the null
+hypothesis at the <span class="math inline">\(\alpha = .05\)</span>
+significance level and conclude that errors are still normally
+distributed.</p>
+<p>We will also check the <span class="math inline">\(R^2\)</span> of
+both models,</p>
+<pre><code>## [1] 0.6818018</code></pre>
+<pre><code>## [1] 0.7651252</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Model</th>
+<th align="center"><span class="math inline">\(R^2\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">Standard Model</td>
+<td align="center">.682</td>
+</tr>
+<tr class="even">
+<td align="center">Model with Influential Points Removed</td>
+<td align="center">.765</td>
+</tr>
+</tbody>
+</table>
+<p>It is clear that the Model with Influential Points removed is the
+preferred model as it explains almost 8% more of the observed
+variability in price with the predictors.</p>
+</div>
+<div id="outliers" class="section level4">
+<h4>Outliers</h4>
+<p>To check for outliers we will be using the studentized residuals at
+the <span class="math inline">\(\alpha\)</span> = .05 significance
+level.</p>
+<pre><code>## [1] 0</code></pre>
+<p>We can see that there are zero outliers, so we move on. Our model now
+has normally distributed errors, however the equal variance assumption
+is violated. Therefore, we will look to use a regression method other
+than ordinary least squares. Since our errors are not correlated
+(heteroscedastic) we will use weighted least squares.</p>
+</div>
+<div id="weighted-least-squares-wls" class="section level3">
+<h3>Weighted Least Squares (WLS)</h3>
+<p>We now begin performing the weighted least squares regression. We
+create a model using the absolute values of the residual and then
+calculate weights as <span class="math inline">\(\frac{1}{fitted
+values^2}\)</span> . We then create our model with these weights.</p>
+<p>After creating our model, we will perform a t-test at the 5%
+significance for each parameter for the OLS model and the WLS model.</p>
+<pre class="r"><code>summary(model_fix)$coef</code></pre>
+<pre><code>##                                     Estimate   Std. Error     t value
+## (Intercept)                     2.141915e+00 5.302406e-03 403.9514672
+## area                            5.907142e-06 5.027083e-07  11.7506342
+## bedrooms                        3.069604e-03 1.460984e-03   2.1010526
+## bathrooms                       2.031370e-02 2.157080e-03   9.4172223
+## stories                         1.108560e-02 1.278263e-03   8.6723961
+## mainroadyes                     1.112906e-02 2.855096e-03   3.8979622
+## guestroomyes                    8.332999e-03 2.689821e-03   3.0979750
+## basementyes                     8.955097e-03 2.261239e-03   3.9602611
+## hotwaterheatingyes              1.823810e-02 5.235216e-03   3.4837348
+## airconditioningyes              2.146773e-02 2.179699e-03   9.8489411
+## parking                         5.185229e-03 1.192873e-03   4.3468416
+## prefareayes                     1.581479e-02 2.346185e-03   6.7406397
+## furnishingstatussemi-furnished  4.115109e-04 2.369479e-03   0.1736715
+## furnishingstatusunfurnished    -1.353626e-02 2.542063e-03  -5.3249124
+##                                    Pr(&gt;|t|)
+## (Intercept)                    0.000000e+00
+## area                           2.692049e-28
+## bedrooms                       3.614038e-02
+## bathrooms                      1.744825e-19
+## stories                        6.062862e-17
+## mainroadyes                    1.103401e-04
+## guestroomyes                   2.058964e-03
+## basementyes                    8.583162e-05
+## hotwaterheatingyes             5.382511e-04
+## airconditioningyes             5.062464e-21
+## parking                        1.676559e-05
+## prefareayes                    4.392654e-11
+## furnishingstatussemi-furnished 8.621945e-01
+## furnishingstatusunfurnished    1.533874e-07</code></pre>
+<pre class="r"><code>summary(model_wls)$coef</code></pre>
+<pre><code>##                                    Estimate   Std. Error    t value
+## (Intercept)                     202976.9054 201791.97195  1.0058721
+## area                               235.9559     19.73992 11.9532316
+## bedrooms                         59436.8930  58672.91297  1.0130210
+## bathrooms                       973066.4370  77714.48916 12.5210427
+## stories                         445848.4741  50501.61032  8.8284011
+## mainroadyes                     413588.3477 104561.58130  3.9554523
+## guestroomyes                    314317.1921 102081.26086  3.0790881
+## basementyes                     202285.1071  85665.27073  2.3613432
+## hotwaterheatingyes              841548.0291 165971.87119  5.0704256
+## airconditioningyes              847449.4533  82662.54839 10.2519154
+## parking                         230823.0207  47394.52064  4.8702470
+## prefareayes                     659023.6319  86522.10442  7.6168239
+## furnishingstatussemi-furnished  -15468.6797  87386.02075 -0.1770155
+## furnishingstatusunfurnished    -370667.1912 104208.46267 -3.5569778
+##                                    Pr(&gt;|t|)
+## (Intercept)                    3.149676e-01
+## area                           4.090176e-29
+## bedrooms                       3.115440e-01
+## bathrooms                      1.900468e-31
+## stories                        1.830580e-17
+## mainroadyes                    8.752241e-05
+## guestroomyes                   2.191426e-03
+## basementyes                    1.859454e-02
+## hotwaterheatingyes             5.615502e-07
+## airconditioningyes             1.694247e-22
+## parking                        1.501267e-06
+## prefareayes                    1.326566e-13
+## furnishingstatussemi-furnished 8.595685e-01
+## furnishingstatusunfurnished    4.111437e-04</code></pre>
+<p>For OLS every variable is significant except bedrooms and furnishing
+status semi furnished. For WLS every variable is significant except
+bedrooms, hot water heating yes, and furnishing status semi
+furnished.</p>
+</div>
 </div>
 </div>
 
